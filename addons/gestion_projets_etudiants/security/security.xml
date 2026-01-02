@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- CATEGORY (Module Category in Users form) -->
+        <record model="ir.module.category" id="module_category_student_project">
+            <field name="name">Gestion des Projets</field>
+            <field name="description">Niveaux d'accès pour les projets étudiants.</field>
+            <field name="sequence">10</field>
+        </record>
+
+        <!-- GROUP: STUDENT -->
+        <record id="group_student_project_student" model="res.groups">
+            <field name="name">Étudiant</field>
+            <field name="category_id" ref="module_category_student_project"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="comment">Peut voir uniquement ses propres projets.</field>
+        </record>
+
+        <!-- GROUP: TUTOR (TEACHER) -->
+        <record id="group_student_project_tutor" model="res.groups">
+            <field name="name">Tuteur / Professeur</field>
+            <field name="category_id" ref="module_category_student_project"/>
+            <field name="implied_ids" eval="[(4, ref('group_student_project_student'))]"/>
+            <field name="comment">Peut voir tous les projets et les valider.</field>
+        </record>
+
+        <!-- GROUP: MANAGER (ADMIN) -->
+        <record id="group_student_project_manager" model="res.groups">
+            <field name="name">Responsable Pédagogique</field>
+            <field name="category_id" ref="module_category_student_project"/>
+            <field name="implied_ids" eval="[(4, ref('group_student_project_tutor'))]"/>
+            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        </record>
+
+        <!-- RECORD RULES (Row Level Security) -->
+        
+        <!-- Student Rule: Can only see projects where they are assigned -->
+        <record id="rule_student_project_student_own" model="ir.rule">
+            <field name="name">Projets Étudiant: Seulement les siens</field>
+            <field name="model_id" ref="model_student_project"/>
+            <field name="groups" eval="[(4, ref('group_student_project_student'))]"/>
+            <field name="domain_force">[('student_ids', 'in', user.partner_id.id)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="False"/> <!-- Students usually can't delete -->
+        </record>
+
+        <!-- Tutor Rule: See ALL projects (or refine to supervised only if needed, currently ALL for visibility) -->
+        <record id="rule_student_project_tutor_all" model="ir.rule">
+            <field name="name">Projets Tuteur: Tous</field>
+            <field name="model_id" ref="model_student_project"/>
+            <field name="groups" eval="[(4, ref('group_student_project_tutor'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_student_project_student,student.project.student,model_student_project,group_student_project_student,1,1,1,0
+access_student_project_tutor,student.project.tutor,model_student_project,group_student_project_tutor,1,1,1,1
+access_student_project_manager,student.project.manager,model_student_project,group_student_project_manager,1,1,1,1
