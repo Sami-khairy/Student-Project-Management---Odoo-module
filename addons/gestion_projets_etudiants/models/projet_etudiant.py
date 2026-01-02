@@ -52,7 +52,12 @@ class StudentProject(models.Model):
     )
     progress = fields.Float(string="Progression", compute="_compute_progress", store=True)
 
-    grade = fields.Float(string="Note Finale (/20)", tracking=True)
+    # Évaluation Détaillée
+    grade_report = fields.Float(string="Note Rapport (/10)", default=0.0, tracking=True)
+    grade_oral = fields.Float(string="Note Présentation (/5)", default=0.0, tracking=True)
+    grade_technical = fields.Float(string="Qualité Technique (/5)", default=0.0, tracking=True)
+    
+    grade = fields.Float(string="Note Finale (/20)", compute="_compute_total_grade", store=True, tracking=True)
 
     state = fields.Selection([
         ('draft', 'Brouillon'),
@@ -106,8 +111,17 @@ class StudentProject(models.Model):
                 done = len(record.milestone_ids.filtered(lambda m: m.is_done))
                 record.progress = (done / total) * 100
 
-    @api.constrains('grade')
-    def _check_grade(self):
+    @api.depends('grade_report', 'grade_oral', 'grade_technical')
+    def _compute_total_grade(self):
         for record in self:
-            if record.grade < 0 or record.grade > 20:
-                raise models.ValidationError("La note doit être comprise entre 0 et 20 !")
+            record.grade = record.grade_report + record.grade_oral + record.grade_technical
+
+    @api.constrains('grade_report', 'grade_oral', 'grade_technical')
+    def _check_sub_grades(self):
+        for record in self:
+            if not (0 <= record.grade_report <= 10):
+                raise models.ValidationError("La note du rapport doit être entre 0 et 10.")
+            if not (0 <= record.grade_oral <= 5):
+                raise models.ValidationError("La note orale doit être entre 0 et 5.")
+            if not (0 <= record.grade_technical <= 5):
+                raise models.ValidationError("La note technique doit être entre 0 et 5.")
