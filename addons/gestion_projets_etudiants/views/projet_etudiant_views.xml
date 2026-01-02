@@ -190,6 +190,32 @@
         </field>
     </record>
 
+    <!-- GRAPH VIEW -->
+    <record id="view_student_project_graph" model="ir.ui.view">
+        <field name="name">student.project.graph</field>
+        <field name="model">student.project</field>
+        <field name="arch" type="xml">
+            <graph string="Statistiques Projets" type="bar">
+                <field name="project_type"/>
+                <field name="grade" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- PIVOT VIEW -->
+    <record id="view_student_project_pivot" model="ir.ui.view">
+        <field name="name">student.project.pivot</field>
+        <field name="model">student.project</field>
+        <field name="arch" type="xml">
+            <pivot string="Analyse des Projets">
+                <field name="project_type" type="row"/>
+                <field name="supervisor_id" type="row"/>
+                <field name="state" type="col"/>
+                <field name="grade" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
     <!-- ACTIONS -->
     <record id="action_student_project" model="ir.actions.act_window">
         <field name="name">Projets Étudiants</field>
@@ -210,5 +236,23 @@
               parent="menu_school_root"
               action="action_student_project"
               sequence="10"/>
+
+    <!-- REPORTING MENU -->
+    <record id="action_student_project_reporting" model="ir.actions.act_window">
+        <field name="name">Tableau de Bord</field>
+        <field name="res_model">student.project</field>
+        <field name="view_mode">graph,pivot</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Aucune donnée pour les statistiques actuellement.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_student_project_reporting"
+              name="Statistiques"
+              parent="menu_school_root"
+              action="action_student_project_reporting"
+              sequence="20"/>
 
 </odoo>
