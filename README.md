@@ -1,3 +1,13 @@
+## 📸 Demo Screenshots
+
+<img width="945" height="215" alt="Image" src="https://github.com/user-attachments/assets/f4fc0ab6-ee8c-4ae4-a581-88ea9f6c8f2d" />
+
+<img width="945" height="403" alt="Image" src="https://github.com/user-attachments/assets/02a28207-af56-4f4c-bc75-30c43dfd2195" />
+
+<img width="1032" height="494" alt="Image" src="https://github.com/user-attachments/assets/c2c0c9c7-d4b3-4a62-80e7-c734509f6efe" />
+
+<img width="945" height="323" alt="Image" src="https://github.com/user-attachments/assets/0fa18a93-1f90-461c-b692-e595779a5186" />
+
 # 📘 Guide Utilisateur - Gestion des Projets Étudiants
 
 Bienvenue dans le module de gestion des projets académiques (PFE, PFA, Stages). Ce guide détaille toutes les fonctionnalités disponibles et comment les utiliser efficacement.
